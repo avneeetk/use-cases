@@ -1,0 +1,341 @@
+export interface UseCase {
+  id: string;
+  title: string;
+  category: string;
+  detectionMethod: string;
+  triggerConditions: string;
+  description: string;
+  mitreAttack: string[];
+  logSources: string[];
+  playbooks: string[];
+  soarActions: string;
+  simulationType: string;
+}
+
+export const useCases: UseCase[] = [
+  {
+    id: '1',
+    title: 'Ransomware File Encryption Detection',
+    category: 'Malware Execution',
+    detectionMethod: 'EDR - Behavioral Analysis + File System Monitoring',
+    triggerConditions: 'Rapid file extension changes (>50 files/min) + entropy analysis showing encryption patterns',
+    description: 'This use case detects ransomware attacks by monitoring file system changes and analyzing file entropy patterns. The detection combines behavioral analysis with file system monitoring to identify rapid encryption activities typical of ransomware attacks.',
+    mitreAttack: ['T1486 - Data Encrypted for Impact', 'T1083 - File and Directory Discovery'],
+    logSources: ['Windows Event Logs', 'EDR Telemetry', 'File System Monitoring'],
+    playbooks: ['Ransomware Response Playbook', 'Endpoint Isolation Procedure'],
+    soarActions: 'Isolate endpoint immediately, kill suspicious process, snapshot system state, block network traffic',
+    simulationType: 'Red Team - Ransomware simulation tool (e.g., RanSim)'
+  },
+  {
+    id: '2',
+    title: 'Credential Stuffing Attack',
+    category: 'Credential Abuse',
+    detectionMethod: 'XDR - Log Correlation + Behavioral Analytics',
+    triggerConditions: '100+ failed logins from single IP within 10 minutes + multiple application targets',
+    description: 'Detects credential stuffing attacks by correlating authentication logs across multiple systems and identifying patterns consistent with automated credential testing.',
+    mitreAttack: ['T1110.004 - Credential Stuffing', 'T1078 - Valid Accounts'],
+    logSources: ['Authentication Logs', 'Web Application Logs', 'Network Traffic'],
+    playbooks: ['Credential Abuse Response', 'Account Lockout Procedure'],
+    soarActions: 'Block source IP, implement rate limiting, force password resets for targeted accounts',
+    simulationType: 'Brute-force tool simulation (e.g., Hydra, Burp Suite)'
+  },
+  {
+    id: '3',
+    title: 'Living-off-the-Land Binary Abuse',
+    category: 'Malware Execution',
+    detectionMethod: 'EDR - Process Monitoring + Command Line Analysis',
+    triggerConditions: 'PowerShell.exe with encoded commands + suspicious parent process + network connections',
+    description: 'Identifies abuse of legitimate system binaries for malicious purposes, focusing on PowerShell and other built-in tools used by attackers to blend in with normal system activity.',
+    mitreAttack: ['T1059.001 - PowerShell', 'T1027 - Obfuscated Files or Information'],
+    logSources: ['Process Creation Events', 'Command Line Logs', 'Network Connections'],
+    playbooks: ['Living-off-the-Land Response', 'Process Analysis Procedure'],
+    soarActions: 'Quarantine endpoint, capture memory dump, block command execution, analyze PowerShell logs',
+    simulationType: 'Red Team - PowerShell Empire or Cobalt Strike simulation'
+  },
+  {
+    id: '4',
+    title: 'Suspicious PowerShell Execution',
+    category: 'Malware Execution',
+    detectionMethod: 'EDR - Command Line Monitoring + Script Analysis',
+    triggerConditions: 'PowerShell with base64 encoding + download cradles + execution policy bypass',
+    description: 'Monitors PowerShell execution for malicious patterns including encoded commands, download attempts, and execution policy bypasses commonly used by attackers.',
+    mitreAttack: ['T1059.001 - PowerShell', 'T1140 - Deobfuscate/Decode Files'],
+    logSources: ['PowerShell Logs', 'Process Creation Events', 'Script Block Logging'],
+    playbooks: ['PowerShell Investigation Playbook', 'Script Analysis Procedure'],
+    soarActions: 'Block PowerShell execution, isolate endpoint, capture script artifacts, analyze command history',
+    simulationType: 'Malicious PowerShell script execution'
+  },
+  {
+    id: '5',
+    title: 'Lateral Movement via SMB',
+    category: 'Network Threat',
+    detectionMethod: 'XDR - Network Traffic Analysis + Authentication Monitoring',
+    triggerConditions: 'Multiple SMB connections to different hosts + admin share access + credential reuse',
+    description: 'Detects lateral movement attempts using SMB protocol by analyzing network traffic patterns and authentication events across multiple systems.',
+    mitreAttack: ['T1021.002 - SMB/Windows Admin Shares', 'T1570 - Lateral Tool Transfer'],
+    logSources: ['Network Traffic Logs', 'Windows Security Events', 'SMB Logs'],
+    playbooks: ['Lateral Movement Response', 'Network Isolation Procedure'],
+    soarActions: 'Block SMB traffic, isolate affected systems, reset compromised credentials, analyze network topology',
+    simulationType: 'Red Team - PsExec or similar lateral movement tools'
+  },
+  {
+    id: '6',
+    title: 'Phishing Email with Malicious Attachment',
+    category: 'Email Threat',
+    detectionMethod: 'XDR - Email Security Gateway + Sandbox Analysis',
+    triggerConditions: 'Email with suspicious attachment + sandbox detonation alerts + user interaction',
+    description: 'Identifies phishing emails containing malicious attachments through email gateway filtering and sandbox analysis.',
+    mitreAttack: ['T1566.001 - Spearphishing Attachment', 'T1204.002 - Malicious File'],
+    logSources: ['Email Gateway Logs', 'Sandbox Reports', 'User Activity Logs'],
+    playbooks: ['Phishing Response Playbook', 'Email Quarantine Procedure'],
+    soarActions: 'Quarantine email, block sender, notify users, scan endpoints for indicators',
+    simulationType: 'Phishing simulation with malicious attachment'
+  },
+  {
+    id: '7',
+    title: 'Privilege Escalation via Token Manipulation',
+    category: 'Privilege Escalation',
+    detectionMethod: 'EDR - Token Monitoring + Process Behavior Analysis',
+    triggerConditions: 'Token duplication/impersonation + privilege level changes + suspicious process ancestry',
+    description: 'Detects privilege escalation attempts through token manipulation techniques commonly used by attackers to gain higher privileges.',
+    mitreAttack: ['T1134 - Access Token Manipulation', 'T1068 - Exploitation for Privilege Escalation'],
+    logSources: ['Windows Security Events', 'EDR Process Logs', 'Token Activity Logs'],
+    playbooks: ['Privilege Escalation Response', 'Token Analysis Procedure'],
+    soarActions: 'Terminate suspicious processes, reset user tokens, analyze privilege changes, isolate endpoint',
+    simulationType: 'Token manipulation exploit simulation'
+  },
+  {
+    id: '8',
+    title: 'Data Exfiltration via DNS Tunneling',
+    category: 'Data Exfiltration',
+    detectionMethod: 'XDR - DNS Traffic Analysis + Data Loss Prevention',
+    triggerConditions: 'Unusual DNS query patterns + large data volumes + suspicious domain requests',
+    description: 'Identifies data exfiltration attempts using DNS tunneling by analyzing DNS traffic patterns and detecting anomalous query behaviors.',
+    mitreAttack: ['T1048.003 - Exfiltration Over Alternative Protocol', 'T1071.004 - DNS'],
+    logSources: ['DNS Logs', 'Network Traffic Analysis', 'DLP Alerts'],
+    playbooks: ['Data Exfiltration Response', 'DNS Investigation Procedure'],
+    soarActions: 'Block suspicious DNS queries, isolate affected systems, analyze data flows, notify data owners',
+    simulationType: 'DNS tunneling tool simulation (e.g., dnscat2)'
+  },
+  {
+    id: '9',
+    title: 'Insider Threat - Unusual Data Access',
+    category: 'Insider Threat',
+    detectionMethod: 'XDR - User Behavior Analytics + Data Access Monitoring',
+    triggerConditions: 'Access to sensitive data outside normal patterns + bulk downloads + off-hours activity',
+    description: 'Detects potential insider threats by monitoring user behavior patterns and identifying unusual access to sensitive data.',
+    mitreAttack: ['T1530 - Data from Cloud Storage Object', 'T1005 - Data from Local System'],
+    logSources: ['File Access Logs', 'User Activity Logs', 'Database Audit Logs'],
+    playbooks: ['Insider Threat Investigation', 'Data Access Review Procedure'],
+    soarActions: 'Monitor user activity, restrict data access, notify HR/Legal, preserve evidence',
+    simulationType: 'Insider threat scenario simulation'
+  },
+  {
+    id: '10',
+    title: 'USB-Based Malware Infection',
+    category: 'Malware Execution',
+    detectionMethod: 'EDR - USB Device Monitoring + File System Analysis',
+    triggerConditions: 'USB device insertion + autorun execution + malware signatures detected',
+    description: 'Detects malware infections originating from USB devices by monitoring device insertions and analyzing autorun behaviors.',
+    mitreAttack: ['T1091 - Replication Through Removable Media', 'T1566.001 - Spearphishing Attachment'],
+    logSources: ['USB Device Logs', 'File System Events', 'Malware Detection Alerts'],
+    playbooks: ['USB Malware Response', 'Device Quarantine Procedure'],
+    soarActions: 'Block USB device, quarantine files, scan system for malware, update USB policies',
+    simulationType: 'USB malware drop simulation'
+  },
+  {
+    id: '11',
+    title: 'Scheduled Task Persistence',
+    category: 'Persistence',
+    detectionMethod: 'EDR - Task Scheduler Monitoring + Process Analysis',
+    triggerConditions: 'New scheduled task creation + suspicious executable path + persistence indicators',
+    description: 'Identifies persistence mechanisms using scheduled tasks by monitoring task creation and analyzing task properties.',
+    mitreAttack: ['T1053.005 - Scheduled Task', 'T1547 - Boot or Logon Autostart Execution'],
+    logSources: ['Task Scheduler Logs', 'Process Creation Events', 'Registry Monitoring'],
+    playbooks: ['Persistence Investigation', 'Task Removal Procedure'],
+    soarActions: 'Delete malicious tasks, analyze task properties, check for additional persistence, isolate endpoint',
+    simulationType: 'Scheduled task persistence simulation'
+  },
+  {
+    id: '12',
+    title: 'Port Scanning Activity',
+    category: 'Network Threat',
+    detectionMethod: 'XDR - Network Traffic Analysis + IDS/IPS',
+    triggerConditions: 'Multiple port connection attempts + sequential port scanning + reconnaissance patterns',
+    description: 'Detects network reconnaissance activities through port scanning by analyzing network traffic patterns and connection attempts.',
+    mitreAttack: ['T1046 - Network Service Scanning', 'T1595.001 - Scanning IP Blocks'],
+    logSources: ['Network Traffic Logs', 'IDS/IPS Alerts', 'Firewall Logs'],
+    playbooks: ['Network Reconnaissance Response', 'IP Blocking Procedure'],
+    soarActions: 'Block scanning IP, analyze scan patterns, check for vulnerabilities, notify network team',
+    simulationType: 'Network scanning tool simulation (e.g., Nmap)'
+  },
+  {
+    id: '13',
+    title: 'Cloud Resource Abuse',
+    category: 'Cloud Threat',
+    detectionMethod: 'XDR - Cloud API Monitoring + Resource Usage Analysis',
+    triggerConditions: 'Unusual cloud resource creation + API abuse patterns + cost anomalies',
+    description: 'Identifies abuse of cloud resources through monitoring API calls and analyzing resource usage patterns.',
+    mitreAttack: ['T1578 - Modify Cloud Compute Infrastructure', 'T1535 - Cloud Service Discovery'],
+    logSources: ['Cloud API Logs', 'Resource Usage Metrics', 'Billing Alerts'],
+    playbooks: ['Cloud Abuse Response', 'Resource Termination Procedure'],
+    soarActions: 'Terminate unauthorized resources, review API keys, analyze usage patterns, notify cloud team',
+    simulationType: 'Cloud resource abuse simulation'
+  },
+  {
+    id: '14',
+    title: 'Registry Modification for Persistence',
+    category: 'Persistence',
+    detectionMethod: 'EDR - Registry Monitoring + Behavioral Analysis',
+    triggerConditions: 'Registry key modifications in autostart locations + suspicious process ancestry',
+    description: 'Detects persistence mechanisms through registry modifications by monitoring key registry locations.',
+    mitreAttack: ['T1547.001 - Registry Run Keys', 'T1112 - Modify Registry'],
+    logSources: ['Registry Monitoring Logs', 'Process Creation Events', 'System Events'],
+    playbooks: ['Registry Persistence Response', 'Registry Cleanup Procedure'],
+    soarActions: 'Revert registry changes, analyze modifications, check for additional persistence, isolate endpoint',
+    simulationType: 'Registry persistence mechanism simulation'
+  },
+  {
+    id: '15',
+    title: 'Web Shell Detection',
+    category: 'Persistence',
+    detectionMethod: 'XDR - Web Server Monitoring + File Integrity Monitoring',
+    triggerConditions: 'New web files in server directories + suspicious web requests + command execution',
+    description: 'Identifies web shells deployed on web servers through file monitoring and web request analysis.',
+    mitreAttack: ['T1505.003 - Web Shell', 'T1190 - Exploit Public-Facing Application'],
+    logSources: ['Web Server Logs', 'File Integrity Monitoring', 'Network Traffic'],
+    playbooks: ['Web Shell Response', 'Server Isolation Procedure'],
+    soarActions: 'Remove web shell files, block malicious IPs, patch vulnerabilities, isolate web server',
+    simulationType: 'Web shell deployment simulation'
+  },
+  {
+    id: '16',
+    title: 'Suspicious Network Beaconing',
+    category: 'Network Threat',
+    detectionMethod: 'XDR - Network Traffic Analysis + Behavioral Analytics',
+    triggerConditions: 'Regular outbound connections + consistent timing patterns + suspicious destinations',
+    description: 'Detects command and control communications through network beaconing pattern analysis.',
+    mitreAttack: ['T1071 - Application Layer Protocol', 'T1573 - Encrypted Channel'],
+    logSources: ['Network Traffic Logs', 'DNS Logs', 'Proxy Logs'],
+    playbooks: ['C2 Communication Response', 'Network Isolation Procedure'],
+    soarActions: 'Block C2 domains, isolate infected systems, analyze traffic patterns, update threat intelligence',
+    simulationType: 'C2 beaconing simulation'
+  },
+  {
+    id: '17',
+    title: 'Credential Dumping via LSASS',
+    category: 'Credential Abuse',
+    detectionMethod: 'EDR - Process Monitoring + Memory Analysis',
+    triggerConditions: 'LSASS process access + memory dump attempts + credential extraction tools',
+    description: 'Detects credential dumping attempts by monitoring access to the LSASS process and identifying memory extraction activities.',
+    mitreAttack: ['T1003.001 - LSASS Memory', 'T1055 - Process Injection'],
+    logSources: ['Process Access Logs', 'Memory Analysis', 'Security Events'],
+    playbooks: ['Credential Dumping Response', 'Memory Analysis Procedure'],
+    soarActions: 'Terminate malicious processes, reset credentials, analyze memory dumps, isolate endpoint',
+    simulationType: 'Credential dumping tool simulation (e.g., Mimikatz)'
+  },
+  {
+    id: '18',
+    title: 'Suspicious File Download',
+    category: 'Malware Execution',
+    detectionMethod: 'XDR - Network Monitoring + File Analysis',
+    triggerConditions: 'File downloads from suspicious domains + malware signatures + execution attempts',
+    description: 'Identifies malicious file downloads by monitoring network traffic and analyzing downloaded files.',
+    mitreAttack: ['T1105 - Ingress Tool Transfer', 'T1204.002 - Malicious File'],
+    logSources: ['Network Traffic Logs', 'File System Events', 'Malware Detection'],
+    playbooks: ['Malicious Download Response', 'File Quarantine Procedure'],
+    soarActions: 'Block download URLs, quarantine files, scan endpoints, update threat intelligence',
+    simulationType: 'Malicious file download simulation'
+  },
+  {
+    id: '19',
+    title: 'Service Creation for Persistence',
+    category: 'Persistence',
+    detectionMethod: 'EDR - Service Monitoring + Process Analysis',
+    triggerConditions: 'New service creation + suspicious executable paths + persistence indicators',
+    description: 'Detects persistence mechanisms through Windows service creation by monitoring service installations.',
+    mitreAttack: ['T1543.003 - Windows Service', 'T1569.002 - Service Execution'],
+    logSources: ['Service Control Manager Logs', 'Process Events', 'Registry Changes'],
+    playbooks: ['Service Persistence Response', 'Service Removal Procedure'],
+    soarActions: 'Stop malicious services, remove service entries, analyze service properties, isolate endpoint',
+    simulationType: 'Malicious service installation simulation'
+  },
+  {
+    id: '20',
+    title: 'DLL Hijacking Attack',
+    category: 'Privilege Escalation',
+    detectionMethod: 'EDR - DLL Loading Monitoring + File System Analysis',
+    triggerConditions: 'DLL loaded from unusual locations + missing legitimate DLL + privilege escalation',
+    description: 'Identifies DLL hijacking attacks by monitoring DLL loading patterns and detecting malicious DLL placement.',
+    mitreAttack: ['T1574.001 - DLL Search Order Hijacking', 'T1574.002 - DLL Side-Loading'],
+    logSources: ['DLL Loading Events', 'File System Monitoring', 'Process Creation'],
+    playbooks: ['DLL Hijacking Response', 'File Integrity Check'],
+    soarActions: 'Remove malicious DLLs, restore legitimate files, analyze DLL properties, isolate endpoint',
+    simulationType: 'DLL hijacking exploit simulation'
+  },
+  {
+    id: '21',
+    title: 'Suspicious WMI Activity',
+    category: 'Malware Execution',
+    detectionMethod: 'EDR - WMI Monitoring + Process Analysis',
+    triggerConditions: 'WMI process creation + suspicious command execution + persistence attempts',
+    description: 'Detects malicious use of Windows Management Instrumentation for execution and persistence.',
+    mitreAttack: ['T1047 - Windows Management Instrumentation', 'T1546.003 - WMI Event Subscription'],
+    logSources: ['WMI Activity Logs', 'Process Creation Events', 'WMI Repository'],
+    playbooks: ['WMI Abuse Response', 'WMI Cleanup Procedure'],
+    soarActions: 'Remove WMI subscriptions, terminate WMI processes, analyze WMI queries, isolate endpoint',
+    simulationType: 'WMI-based attack simulation'
+  },
+  {
+    id: '22',
+    title: 'Suspicious Registry Run Key',
+    category: 'Persistence',
+    detectionMethod: 'EDR - Registry Monitoring + Startup Analysis',
+    triggerConditions: 'Registry run key modifications + suspicious executable paths + autostart behavior',
+    description: 'Identifies persistence through registry run keys by monitoring autostart registry locations.',
+    mitreAttack: ['T1547.001 - Registry Run Keys', 'T1112 - Modify Registry'],
+    logSources: ['Registry Monitoring', 'Startup Programs', 'Process Creation'],
+    playbooks: ['Registry Run Key Response', 'Autostart Cleanup'],
+    soarActions: 'Remove malicious registry entries, analyze startup programs, check for additional persistence',
+    simulationType: 'Registry run key persistence simulation'
+  },
+  {
+    id: '23',
+    title: 'Suspicious Process Injection',
+    category: 'Malware Execution',
+    detectionMethod: 'EDR - Process Monitoring + Memory Analysis',
+    triggerConditions: 'Process injection techniques + memory allocation patterns + code injection indicators',
+    description: 'Detects process injection attacks by monitoring memory allocation and process manipulation activities.',
+    mitreAttack: ['T1055 - Process Injection', 'T1055.001 - Dynamic-link Library Injection'],
+    logSources: ['Process Monitoring', 'Memory Analysis', 'API Call Monitoring'],
+    playbooks: ['Process Injection Response', 'Memory Forensics Procedure'],
+    soarActions: 'Terminate injected processes, capture memory dumps, analyze injection techniques, isolate endpoint',
+    simulationType: 'Process injection attack simulation'
+  },
+  {
+    id: '24',
+    title: 'Suspicious Network Share Access',
+    category: 'Network Threat',
+    detectionMethod: 'XDR - Network Monitoring + Authentication Analysis',
+    triggerConditions: 'Unusual network share access + credential abuse + data access patterns',
+    description: 'Identifies suspicious access to network shares that may indicate lateral movement or data theft.',
+    mitreAttack: ['T1021.002 - SMB/Windows Admin Shares', 'T1039 - Data from Network Shared Drive'],
+    logSources: ['Network Share Logs', 'Authentication Events', 'File Access Logs'],
+    playbooks: ['Network Share Response', 'Access Review Procedure'],
+    soarActions: 'Block suspicious access, review share permissions, analyze access patterns, notify data owners',
+    simulationType: 'Network share abuse simulation'
+  },
+  {
+    id: '25',
+    title: 'Suspicious Email Forwarding Rule',
+    category: 'Email Threat',
+    detectionMethod: 'XDR - Email System Monitoring + Rule Analysis',
+    triggerConditions: 'New email forwarding rules + external destinations + suspicious rule properties',
+    description: 'Detects malicious email forwarding rules that may be used for data exfiltration or persistence.',
+    mitreAttack: ['T1114.003 - Email Forwarding Rule', 'T1048.003 - Exfiltration Over Alternative Protocol'],
+    logSources: ['Email Server Logs', 'Mail Rule Changes', 'User Activity Logs'],
+    playbooks: ['Email Rule Response', 'Mail Security Review'],
+    soarActions: 'Remove malicious rules, block external forwarding, analyze rule properties, notify users',
+    simulationType: 'Malicious email rule creation simulation'
+  }
+];
