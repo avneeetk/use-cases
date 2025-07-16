@@ -8,6 +8,12 @@ const app = express();
 const PORT = 5000;
 
 app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:5173', 
+  methods: ['POST', 'GET', 'OPTIONS'],
+  allowedHeaders: ['Content-Type']
+}));
+
 app.use(bodyParser.json());
 
 app.post('/api/simulate', (req, res) => {

@@ -167,22 +167,30 @@ export const UseCasesDashboard: React.FC = () => {
   const handleSimulate = async (scriptId: string) => {
     setLoading(true);
     setStatus('Running simulation...');
+    
     try {
-      const response = await fetch(`/api/simulate/${scriptId}`, {
+      const response = await fetch('http://localhost:5000/api/simulate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ scriptId })
       });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
       const result = await response.json();
-      if(result.success) {
+      console.log('Simulation result:', result);
+      
+      if (result.status === 'success') {
         setStatus('Simulation completed successfully!');
       } else {
-        setStatus(`error: ${result.message}`);
+        setStatus(`Error: ${result.message || 'Unknown error occurred'}`);
       }
     } catch (error) {
-      console.error(`error`);
+      console.error('Simulation error:', error);
       setStatus('Simulation failed. Please try again.');
     } finally {
       setLoading(false);
@@ -332,14 +340,20 @@ export const UseCasesDashboard: React.FC = () => {
                             <span>Details</span>
                           </motion.button>
                           <motion.button
-                            className="flex items-center space-x-1 px-3 py-1.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
+                            className={`flex items-center space-x-1 px-3 py-1.5 text-sm font-medium text-white ${
+                              loading ? 'bg-blue-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
+                            } rounded-lg transition-colors`}
+                            whileHover={{ scale: loading ? 1 : 1.02 }}
+                            whileTap={{ scale: loading ? 1 : 0.98 }}
                             onClick={() => handleSimulate(useCase.id)}
                             disabled={loading}
                           >
-                            <Play className="w-4 h-4" />
-                            <span>Simulate</span>
+                            {loading ? (
+                              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                            ) : (
+                              <Play className="w-4 h-4" />
+                            )}
+                            <span>{loading ? 'Running...' : 'Simulate'}</span>
                           </motion.button>
                         </div>
                       </td>
