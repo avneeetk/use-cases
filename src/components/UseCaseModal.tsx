@@ -121,7 +121,7 @@ export const UseCaseModal: React.FC<UseCaseModalProps> = ({ useCase, onClose }) 
               </div>
 
               {/* Playbooks */}
-              <div>
+              {/* <div>
                 <h4 className="text-sm font-medium text-gray-900 dark:text-white mb-2 flex items-center">
                   <FileText className="w-4 h-4 mr-2" />
                   Linked Response Playbooks
@@ -134,7 +134,7 @@ export const UseCaseModal: React.FC<UseCaseModalProps> = ({ useCase, onClose }) 
                     </div>
                   ))}
                 </div>
-              </div>
+              </div> */}
 
               {/* SOAR Actions */}
               <div>

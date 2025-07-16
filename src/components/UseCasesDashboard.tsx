@@ -332,16 +332,16 @@ export const UseCasesDashboard: React.FC = () => {
                                     {useCase.description}
                                   </p>
                                   
-                                  <h4 className="font-semibold text-gray-900 mb-3">MITRE ATT&CK Mappings</h4>
+                                  {/* <h4 className="font-semibold text-gray-900 mb-3">MITRE ATT&CK Mappings</h4> */}
                                   <div className="flex flex-wrap gap-2 mb-4">
-                                    {useCase.mitreAttack.map((technique, index) => (
+                                    {/* {useCase.mitreAttack.map((technique, index) => (
                                       <span
                                         key={index}
                                         className="inline-flex items-center px-2 py-1 text-xs font-medium bg-red-100 text-red-800 rounded-full border border-red-200"
                                       >
                                         {technique}
                                       </span>
-                                    ))}
+                                    ))} */}
                                   </div>
                                 </div>
                                 
@@ -356,14 +356,14 @@ export const UseCasesDashboard: React.FC = () => {
                                     ))}
                                   </div>
                                   
-                                  <h4 className="font-semibold text-gray-900 mb-3">Response Playbooks</h4>
+                                  {/* <h4 className="font-semibold text-gray-900 mb-3">Response Playbooks</h4> */}
                                   <div className="space-y-2">
                                     {useCase.playbooks.map((playbook, index) => (
                                       <div key={index} className="flex items-center space-x-2">
-                                        <ExternalLink className="w-3 h-3 text-blue-500" />
-                                        <span className="text-sm text-blue-600 hover:text-blue-800 cursor-pointer">
-                                          {playbook}
-                                        </span>
+                                        {/* <ExternalLink className="w-3 h-3 text-blue-500" /> */}
+                                        {/* <span className="text-sm text-blue-600 hover:text-blue-800 cursor-pointer">
+                                          {playbook} */}
+                                        {/* </span> */}
                                       </div>
                                     ))}
                                   </div>
