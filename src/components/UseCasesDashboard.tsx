@@ -13,6 +13,7 @@ import {
   ExternalLink
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { script } from 'framer-motion/client';
 
 interface UseCase {
   id: string;
@@ -157,6 +158,34 @@ export const UseCasesDashboard: React.FC = () => {
       case 'Malware Execution': return <Shield className="w-4 h-4 text-red-500" />;
       case 'Network Threat': return <AlertTriangle className="w-4 h-4 text-blue-500" />;
       default: return <Shield className="w-4 h-4 text-gray-500" />;
+    }
+  };
+
+  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState('');
+
+  const handleSimulate = async (scriptId: string) => {
+    setLoading(true);
+    setStatus('Running simulation...');
+    try {
+      const response = await fetch(`/api/simulate/${scriptId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ scriptId })
+      });
+      const result = await response.json();
+      if(result.success) {
+        setStatus('Simulation completed successfully!');
+      } else {
+        setStatus(`error: ${result.message}`);
+      }
+    } catch (error) {
+      console.error(`error`);
+      setStatus('Simulation failed. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -306,6 +335,8 @@ export const UseCasesDashboard: React.FC = () => {
                             className="flex items-center space-x-1 px-3 py-1.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
+                            onClick={() => handleSimulate(useCase.id)}
+                            disabled={loading}
                           >
                             <Play className="w-4 h-4" />
                             <span>Simulate</span>
